@@ -1,0 +1,49 @@
+﻿@page "/roles"
+@inherits RoleBaseOverview
+
+    <section class="container-fluid">
+        <div class="breadcrubTitle">
+            <h3>Role</h3>
+        </div>
+        @if (Roles == null)
+        {
+            <div class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        }
+        else
+        {
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+              
+                    @foreach (var role in Roles)
+                    {
+                        <tr>
+                            <td>@role.Name</td>
+                            <td>@role.Description</td>
+                            <td>
+                      
+                                <button @onclick="@(() => QuickEditRole(role.Id))" title="Edit Role?" class="btn btn-primary table-btn">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </section>
+
+<button @onclick="@QuickAddRole" class="btn btn-primary table-btn quick-add-btn">&nbsp;&nbsp;+&nbsp;&nbsp;</button>
+<AddRoleDialog @ref="AddRoleDialog" CloseEventCallback="@AddRoleDialog_OnDialogClose"></AddRoleDialog>
+<EditRoleDialog @ref="EditRoleDialog" CloseEventCallback="@EditRoleDialog_OnDialogClose"></EditRoleDialog>
