@@ -38,16 +38,17 @@ namespace TurntablRoleManager.API.Services
                 _context.SaveChanges();
         }
 
-        //public Employee CreateEmployee(Employee employee)
-        //{
-        //    if (employee == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(employee));
-        //    }
-            
-        //    _context.SaveChanges();
-        //    return _context.Employees.Add(employee).Entity;
-        //}
+        public int CreateEmployee(Employee employee)
+        {
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee));
+            }
+            _context.Employees.Add(employee);
+            _context.SaveChanges();
+
+            return employee.EmployeeId;
+      }
 
     }
 }

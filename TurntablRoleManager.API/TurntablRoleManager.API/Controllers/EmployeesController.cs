@@ -17,14 +17,12 @@ namespace TurntablRoleManager.API.Controllers
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
-        private readonly TurntablDbContext _context;
 
         public EmployeesController(IEmployeeRepository employeeRepository, IMapper mapper, TurntablDbContext context)
         {
             _employeeRepository = employeeRepository;
             _mapper = mapper ??
                 throw new ArgumentNullException(nameof(mapper));
-            _context = context;
         }
 
         [HttpGet]
@@ -62,11 +60,10 @@ namespace TurntablRoleManager.API.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<int>> Post(Employee employee)
+        public  ActionResult<int> Post(Employee employee)
         {
-            _context.Add(employee);
-            await _context.SaveChangesAsync();
-            return employee.EmployeeId;
+            var employeeId = _employeeRepository.CreateEmployee(employee);
+            return employeeId;
         }
     }
 }

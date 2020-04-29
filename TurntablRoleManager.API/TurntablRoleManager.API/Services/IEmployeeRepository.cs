@@ -11,8 +11,6 @@ namespace TurntablRoleManager.API.Services
         IEnumerable<Employee> GetEmployees();
         Employee GetEmployeeById(int id);
         void DeleteEmployee(int id);
-
-        //Role CreateEmployee(Employee employee);
-        //Role UpdateEmployee(Employee employee);
+        public int CreateEmployee(Employee employee);
     }
 }
