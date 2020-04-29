@@ -62,7 +62,7 @@ namespace TurntablRoleManager.API.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<int>> Post(EmployeeTo employee)
+        public async Task<ActionResult<int>> Post(Employee employee)
         {
             _context.Add(employee);
             await _context.SaveChangesAsync();
