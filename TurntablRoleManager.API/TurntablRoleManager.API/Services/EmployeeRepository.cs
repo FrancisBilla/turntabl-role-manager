@@ -31,7 +31,6 @@ namespace TurntablRoleManager.API.Services
             return employee;
         }
 
-
         public void DeleteEmployee(int id)
         {
                 var querableEmployee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
