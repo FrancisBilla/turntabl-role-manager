@@ -16,7 +16,6 @@ namespace TurntablRoleManager.API.Services
         public EmployeeRepository(TurntablDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-
         }
 
         public IEnumerable<Employee> GetEmployees()
