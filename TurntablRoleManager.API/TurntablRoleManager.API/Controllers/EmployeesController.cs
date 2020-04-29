@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TurntablRoleManager.API.DbContexts;
 using TurntablRoleManager.API.Models;
 using TurntablRoleManager.API.Services;
 
@@ -15,11 +16,14 @@ namespace TurntablRoleManager.API.Controllers
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
+        private readonly TurntablDbContext _context;
 
-        public EmployeesController(IEmployeeRepository employeeRepository, IMapper mapper)
+
+        public EmployeesController(IEmployeeRepository employeeRepository, IMapper mapper, TurntablDbContext context)
         {
             _employeeRepository = employeeRepository;
             _mapper = mapper;
+            _context = context;
         }
 
         [HttpGet]
@@ -53,6 +57,15 @@ namespace TurntablRoleManager.API.Controllers
         {
             _employeeRepository.DeleteEmployee(id);
             return NoContent();
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult<int>> Post(EmployeeTo employee)
+        {
+            _context.Add(employee);
+            await _context.SaveChangesAsync();
+            return employee.EmployeeId;
         }
     }
 }
