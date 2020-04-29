@@ -36,6 +36,7 @@ namespace TurntablRoleManager.API
 
 
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             services.AddDbContext<TurntablDbContext>(options =>
             {

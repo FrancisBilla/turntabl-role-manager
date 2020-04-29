@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TurntablRoleManager.API.DbContexts;
+using TurntablRoleManager.API.Entities;
 using TurntablRoleManager.API.Models;
 using TurntablRoleManager.API.Services;
 
@@ -18,7 +19,6 @@ namespace TurntablRoleManager.API.Controllers
         private readonly IMapper _mapper;
         private readonly TurntablDbContext _context;
 
-
         public EmployeesController(IEmployeeRepository employeeRepository, IMapper mapper, TurntablDbContext context)
         {
             _employeeRepository = employeeRepository;
@@ -27,16 +27,16 @@ namespace TurntablRoleManager.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<EmployeeTo>> Employees()
+        public IEnumerable<Employee> Employees()
         { 
             var employees = _employeeRepository.GetEmployees();
 
             if(employees == null)
             {
-                return NotFound();
+                return (IEnumerable<Employee>)NotFound();
             }
 
-            return Ok(_mapper.Map<IEnumerable<EmployeeTo>>(employees));
+            return employees;
         }
 
         [HttpGet("{id}")]
