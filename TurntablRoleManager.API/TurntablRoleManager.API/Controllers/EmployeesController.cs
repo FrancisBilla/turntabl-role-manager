@@ -22,7 +22,8 @@ namespace TurntablRoleManager.API.Controllers
         public EmployeesController(IEmployeeRepository employeeRepository, IMapper mapper, TurntablDbContext context)
         {
             _employeeRepository = employeeRepository;
-            _mapper = mapper;
+            _mapper = mapper ??
+                throw new ArgumentNullException(nameof(mapper));
             _context = context;
         }
 
@@ -49,7 +50,7 @@ namespace TurntablRoleManager.API.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<EmployeeTo>(employee));
+            return Ok(employee);
         }
 
         [HttpDelete("{id}")]
