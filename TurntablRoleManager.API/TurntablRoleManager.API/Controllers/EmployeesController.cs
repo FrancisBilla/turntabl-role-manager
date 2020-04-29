@@ -34,5 +34,25 @@ namespace TurntablRoleManager.API.Controllers
 
             return Ok(_mapper.Map<IEnumerable<EmployeeTo>>(employees));
         }
+
+        [HttpGet("{id}")]
+        public IActionResult Employee(int id)
+        {
+            var employee = _employeeRepository.GetEmployeeById(id);
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<EmployeeTo>(employee));
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _employeeRepository.DeleteEmployee(id);
+            return NoContent();
+        }
     }
 }
