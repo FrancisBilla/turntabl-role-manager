@@ -17,19 +17,18 @@ namespace TurntablRoleManager.API.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly IMapper _mapper;
         private readonly TurntablDbContext _context;
 
         public EmployeesController(IEmployeeRepository employeeRepository, IMapper mapper, TurntablDbContext context)
         {
-            _employeeRepository = employeeRepository;
-            _mapper = mapper ??
-                throw new ArgumentNullException(nameof(mapper));
-            _context = context;
+            _employeeRepository = employeeRepository ??
+                throw new ArgumentNullException(nameof(employeeRepository)); 
+            _context = context ??
+                throw new ArgumentNullException(nameof(context)); 
         }
 
-
-        [HttpGet]
+        // Get all employees and their corresponding roles 
+        [HttpGet]  // api/employees
         public IEnumerable<DetailEmployeeDTO> Employees()
         {
             List <DetailEmployeeDTO> detailEmployeeDTOs = new List<DetailEmployeeDTO>();
