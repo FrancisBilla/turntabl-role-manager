@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TurntablRoleManager.API.DbContexts;
@@ -9,9 +10,10 @@ using TurntablRoleManager.API.DbContexts;
 namespace TurntablRoleManager.API.Migrations
 {
     [DbContext(typeof(TurntablDbContext))]
-    partial class TurntablDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200430113813_updateEmployeeRoleEntity")]
+    partial class updateEmployeeRoleEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,13 +69,6 @@ namespace TurntablRoleManager.API.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("EmployeeRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            EmployeeId = 1,
-                            Id = new Guid("7c4854f2-bbfc-4d5a-88fa-9fe19e480bc0")
-                        });
                 });
 
             modelBuilder.Entity("TurntablRoleManager.API.Entities.Role", b =>

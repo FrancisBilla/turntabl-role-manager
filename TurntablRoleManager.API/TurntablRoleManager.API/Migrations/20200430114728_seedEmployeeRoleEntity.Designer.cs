@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TurntablRoleManager.API.DbContexts;
@@ -9,9 +10,10 @@ using TurntablRoleManager.API.DbContexts;
 namespace TurntablRoleManager.API.Migrations
 {
     [DbContext(typeof(TurntablDbContext))]
-    partial class TurntablDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200430114728_seedEmployeeRoleEntity")]
+    partial class seedEmployeeRoleEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
