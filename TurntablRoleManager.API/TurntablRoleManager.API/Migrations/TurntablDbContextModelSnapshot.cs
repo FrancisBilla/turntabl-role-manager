@@ -2,8 +2,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TurntablRoleManager.API.DbContexts;
 
 namespace TurntablRoleManager.API.Migrations
@@ -15,54 +15,63 @@ namespace TurntablRoleManager.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "3.1.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            modelBuilder.Entity("TurntablRoleManager.API.Entities.Employee", b =>
+                {
+                    b.Property<int>("EmployeeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("EmployeeAddress")
+                        .IsRequired()
+                        .HasColumnType("character varying(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("EmployeeEmail")
+                        .IsRequired()
+                        .HasColumnType("character varying(60)")
+                        .HasMaxLength(60);
+
+                    b.Property<string>("EmployeeFirstName")
+                        .IsRequired()
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("EmployeeLastName")
+                        .IsRequired()
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("EmployeeId");
+
+                    b.ToTable("Employees");
+                });
 
             modelBuilder.Entity("TurntablRoleManager.API.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(1500)")
+                        .HasColumnType("character varying(1500)")
                         .HasMaxLength(1500);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("character varying(100)")
                         .HasMaxLength(100);
 
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("d28888e9-2ba9-473a-a40f-e38cb54f9b35"),
-                            CreatedAt = new DateTime(1650, 7, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Devloping and Managing Application",
-                            Name = "Developer"
-                        },
-                        new
-                        {
-                            Id = new Guid("da2fd609-d754-4feb-8acd-c4f9ff13ba96"),
-                            CreatedAt = new DateTime(1650, 7, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Maninging project for the company",
-                            Name = "Project Manager"
-                        },
-                        new
-                        {
-                            Id = new Guid("2902b665-1190-4c70-9915-b9c2d7680450"),
-                            CreatedAt = new DateTime(1701, 12, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Maninging accounts for the company",
-                            Name = "Accountant"
-                        });
                 });
 #pragma warning restore 612, 618
         }

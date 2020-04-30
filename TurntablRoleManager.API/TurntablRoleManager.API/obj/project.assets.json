@@ -7007,19 +7007,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\sammy\\.nuget\\packages\\": {}
+    "C:\\Users\\Mr. Erbynn\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\sammy\\Documents\\Turntabl\\Tutorials\\Backend\\Tutorials\\TurntablRoleManager.API\\TurntablRoleManager.API\\TurntablRoleManager.API.csproj",
+      "projectUniqueName": "C:\\Users\\Mr. Erbynn\\dev\\TURNTABL\\turntabl-role-manager\\TurntablRoleManager.API\\TurntablRoleManager.API\\TurntablRoleManager.API.csproj",
       "projectName": "TurntablRoleManager.API",
-      "projectPath": "C:\\Users\\sammy\\Documents\\Turntabl\\Tutorials\\Backend\\Tutorials\\TurntablRoleManager.API\\TurntablRoleManager.API\\TurntablRoleManager.API.csproj",
-      "packagesPath": "C:\\Users\\sammy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\sammy\\Documents\\Turntabl\\Tutorials\\Backend\\Tutorials\\TurntablRoleManager.API\\TurntablRoleManager.API\\obj\\",
+      "projectPath": "C:\\Users\\Mr. Erbynn\\dev\\TURNTABL\\turntabl-role-manager\\TurntablRoleManager.API\\TurntablRoleManager.API\\TurntablRoleManager.API.csproj",
+      "packagesPath": "C:\\Users\\Mr. Erbynn\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Mr. Erbynn\\dev\\TURNTABL\\turntabl-role-manager\\TurntablRoleManager.API\\TurntablRoleManager.API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\sammy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Mr. Erbynn\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -7088,7 +7088,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300-preview-015048\\RuntimeIdentifierGraph.json"
       }
     }
   }
