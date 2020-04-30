@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -63,10 +64,40 @@ namespace TurntablRoleManager.API.Services
             return detailEmployeeDTOs;
         }
 
-        public Employee GetEmployeeById(int id)
+        // Get single employee with assigned roles 
+        public DetailEmployeeDTO GetEmployeeById(int id)
         {
-            var employee= _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
-            return employee;
+            DetailEmployeeDTO detailEmployee = new DetailEmployeeDTO();
+            List<RoleTo> soloEmployeeRoles = new List<RoleTo>();
+
+            var querableEmployee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
+          
+            // fetching roles related to employee
+            var querableRoles = (from e in _context.Employees
+                         join er in _context.EmployeeRoles on e.EmployeeId equals er.EmployeeId
+                         join r in _context.Roles on er.Id equals r.Id
+                         where e.EmployeeId == querableEmployee.EmployeeId
+                         select r).ToList();
+
+            foreach (var r in querableRoles)
+            {
+                RoleTo roleTo = new RoleTo();
+                roleTo.Id = r.Id;
+                roleTo.Name = r.Name;
+                roleTo.Description = r.Description;
+                roleTo.CreatedAt = r.CreatedAt;
+
+                soloEmployeeRoles.Add(roleTo);
+            }
+
+            detailEmployee.EmployeeId = querableEmployee.EmployeeId;
+            detailEmployee.EmployeeFirstName = querableEmployee.EmployeeFirstName;
+            detailEmployee.EmployeeLastName = querableEmployee.EmployeeLastName;
+            detailEmployee.EmployeeEmail = querableEmployee.EmployeeEmail;
+            detailEmployee.EmployeeAddress = querableEmployee.EmployeeAddress;
+            detailEmployee.Roles = soloEmployeeRoles;
+
+            return detailEmployee ;
         }
 
         public void DeleteEmployee(int id)

@@ -35,17 +35,11 @@ namespace TurntablRoleManager.API.Controllers
         }
 
 
-        [HttpGet("{id}")]
-        public IActionResult Employee(int id)
+        [HttpGet("{id}")]   // api/employees/1
+        public DetailEmployeeDTO Employee(int id)
         {
             var employee = _employeeRepository.GetEmployeeById(id);
-
-            if (employee == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(employee);
+            return employee;
         }
 
         [HttpDelete("{id}")]
