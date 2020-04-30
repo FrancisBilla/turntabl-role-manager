@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TurntablRoleManager.API.DbContexts;
 using TurntablRoleManager.API.Entities;
+using TurntablRoleManager.API.Models;
 
 namespace TurntablRoleManager.API.Services
 {
@@ -18,10 +19,48 @@ namespace TurntablRoleManager.API.Services
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public IEnumerable<Employee> GetEmployees()
+        // Get all employees and their corresponding roles 
+        public IEnumerable<DetailEmployeeDTO> GetEmployees()
         {
-            var querable = _context.Employees.ToList<Employee>();
-            return querable;
+            List<DetailEmployeeDTO> detailEmployeeDTOs = new List<DetailEmployeeDTO>();
+            List<RoleTo> individualEmployeeRoles = new List<RoleTo>();
+
+            var employeesInDb = _context.Employees.ToList();
+
+            foreach (var emp in employeesInDb)
+            {
+                // fetching roles related to each employee
+                var roles = (from e in _context.Employees
+                             join er in _context.EmployeeRoles on e.EmployeeId equals er.EmployeeId
+                             join r in _context.Roles on er.Id equals r.Id
+                             where e.EmployeeId == emp.EmployeeId
+                             select r).ToList();
+
+                foreach (var r in roles)
+                {
+                    // mapping role dto
+                    RoleTo roleTo = new RoleTo();
+                    roleTo.Id = r.Id;
+                    roleTo.Name = r.Name;
+                    roleTo.Description = r.Description;
+                    roleTo.CreatedAt = r.CreatedAt;
+
+                    individualEmployeeRoles.Add(roleTo);
+                }
+
+                // mapping employee dto to corresponding fields 
+                DetailEmployeeDTO detailEmployeeDTO = new DetailEmployeeDTO();
+                detailEmployeeDTO.EmployeeId = emp.EmployeeId;
+                detailEmployeeDTO.EmployeeFirstName = emp.EmployeeFirstName;
+                detailEmployeeDTO.EmployeeLastName = emp.EmployeeLastName;
+                detailEmployeeDTO.EmployeeEmail = emp.EmployeeEmail;
+                detailEmployeeDTO.EmployeeAddress = emp.EmployeeAddress;
+                detailEmployeeDTO.Roles = individualEmployeeRoles;
+
+                detailEmployeeDTOs.Add(detailEmployeeDTO);
+            };
+
+            return detailEmployeeDTOs;
         }
 
         public Employee GetEmployeeById(int id)
