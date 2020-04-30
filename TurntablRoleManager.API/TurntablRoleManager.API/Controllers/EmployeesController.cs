@@ -41,20 +41,5 @@ namespace TurntablRoleManager.API.Controllers
             var employee = _employeeRepository.GetEmployeeById(id);
             return employee;
         }
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            _employeeRepository.DeleteEmployee(id);
-            return NoContent();
-        }
-
-
-        [HttpPost]
-        public  ActionResult<int> Post(Employee employee)
-        {
-            var employeeId = _employeeRepository.CreateEmployee(employee);
-            return employeeId;
-        }
     }
 }

@@ -9,8 +9,6 @@ namespace TurntablRoleManager.API.Services
 {
     public interface IEmployeeRepository
     {
-        void DeleteEmployee(int id);
-        public int CreateEmployee(Employee employee);
         IEnumerable<DetailEmployeeDTO> GetEmployees();
         DetailEmployeeDTO GetEmployeeById(int id);
     }

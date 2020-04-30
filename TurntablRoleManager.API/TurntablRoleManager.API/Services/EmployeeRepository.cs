@@ -79,6 +79,7 @@ namespace TurntablRoleManager.API.Services
                          where e.EmployeeId == querableEmployee.EmployeeId
                          select r).ToList();
 
+            // fetching all roles related to the employee
             foreach (var r in querableRoles)
             {
                 RoleTo roleTo = new RoleTo();
@@ -90,6 +91,7 @@ namespace TurntablRoleManager.API.Services
                 soloEmployeeRoles.Add(roleTo);
             }
 
+            // mapping querable data to employee detail 
             detailEmployee.EmployeeId = querableEmployee.EmployeeId;
             detailEmployee.EmployeeFirstName = querableEmployee.EmployeeFirstName;
             detailEmployee.EmployeeLastName = querableEmployee.EmployeeLastName;
@@ -100,25 +102,26 @@ namespace TurntablRoleManager.API.Services
             return detailEmployee ;
         }
 
-        public void DeleteEmployee(int id)
-        {
-                var querableEmployee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
 
-                _context.Employees.Remove(querableEmployee);
-                _context.SaveChanges();
-        }
+      //  public void DeleteEmployee(int id)
+      //  {
+      //          var querableEmployee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
 
-        public int CreateEmployee(Employee employee)
-        {
-            if (employee == null)
-            {
-                throw new ArgumentNullException(nameof(employee));
-            }
-            _context.Employees.Add(employee);
-            _context.SaveChanges();
+      //          _context.Employees.Remove(querableEmployee);
+      //          _context.SaveChanges();
+      //  }
 
-            return employee.EmployeeId;
-      }
+      //  public int CreateEmployee(Employee employee)
+      //  {
+      //      if (employee == null)
+      //      {
+      //          throw new ArgumentNullException(nameof(employee));
+      //      }
+      //      _context.Employees.Add(employee);
+      //      _context.SaveChanges();
+
+      //      return employee.EmployeeId;
+      //}
 
     }
 }
