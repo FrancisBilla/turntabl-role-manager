@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,26 +18,61 @@ namespace TurntablRoleManager.API.Controllers
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
+        private readonly TurntablDbContext _context;
 
         public EmployeesController(IEmployeeRepository employeeRepository, IMapper mapper, TurntablDbContext context)
         {
             _employeeRepository = employeeRepository;
             _mapper = mapper ??
                 throw new ArgumentNullException(nameof(mapper));
+            _context = context;
         }
+
 
         [HttpGet]
-        public IEnumerable<Employee> Employees()
-        { 
-            var employees = _employeeRepository.GetEmployees();
+        public IEnumerable<DetailEmployeeDTO> Employees()
+        {
+            List <DetailEmployeeDTO> detailEmployeeDTOs = new List<DetailEmployeeDTO>();
+            List<RoleTo> individualEmployeeRoles = new List<RoleTo>();
 
-            if(employees == null)
+            var employeesInDb = _context.Employees.ToList();
+           
+            foreach (var emp in employeesInDb)
             {
-                return (IEnumerable<Employee>)NotFound();
-            }
+                // fetching roles related to each employee
+                var roles = (from e in _context.Employees
+                             join er in _context.EmployeeRoles on e.EmployeeId equals er.EmployeeId
+                             join r in _context.Roles on er.Id equals r.Id
+                             where e.EmployeeId == emp.EmployeeId
+                             select r).ToList();
 
-            return employees;
+                foreach (var r in roles)
+                {
+                    // mapping role dto
+                    RoleTo roleTo = new RoleTo();
+                    roleTo.Id = r.Id;
+                    roleTo.Name = r.Name;
+                    roleTo.Description = r.Description;
+                    roleTo.CreatedAt = r.CreatedAt;
+                   
+                    individualEmployeeRoles.Add(roleTo);
+                }
+
+                // mapping employee dto to corresponding fields 
+                DetailEmployeeDTO detailEmployeeDTO = new DetailEmployeeDTO();
+                detailEmployeeDTO.EmployeeId = emp.EmployeeId;
+                detailEmployeeDTO.EmployeeFirstName = emp.EmployeeFirstName;
+                detailEmployeeDTO.EmployeeLastName = emp.EmployeeLastName;
+                detailEmployeeDTO.EmployeeEmail = emp.EmployeeEmail;
+                detailEmployeeDTO.EmployeeAddress = emp.EmployeeAddress;
+                detailEmployeeDTO.Roles = individualEmployeeRoles;
+
+                detailEmployeeDTOs.Add(detailEmployeeDTO);
+            };
+        
+            return detailEmployeeDTOs;
         }
+
 
         [HttpGet("{id}")]
         public IActionResult Employee(int id)
