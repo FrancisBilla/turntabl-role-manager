@@ -11,5 +11,6 @@ namespace TurntablRoleManager.API.Services
     {
         IEnumerable<DetailEmployeeDTO> GetEmployees();
         DetailEmployeeDTO GetEmployeeById(int id);
+        int AddEmployeeWithRoles(AddEmployeeDTO employeeDTO);
     }
 }

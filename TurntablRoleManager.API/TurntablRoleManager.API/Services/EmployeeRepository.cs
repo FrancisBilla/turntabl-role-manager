@@ -102,26 +102,68 @@ namespace TurntablRoleManager.API.Services
             return detailEmployee ;
         }
 
+        public int AddEmployeeWithRoles(AddEmployeeDTO employeeDTO)
+        {
+            Employee employee = new Employee();
+            employee.EmployeeFirstName = employeeDTO.EmployeeFirstName;
+            employee.EmployeeLastName = employeeDTO.EmployeeLastName;
+            employee.EmployeeEmail = employeeDTO.EmployeeEmail;
+            employee.EmployeeAddress = employeeDTO.EmployeeAddress;
 
-      //  public void DeleteEmployee(int id)
-      //  {
-      //          var querableEmployee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
+            _context.Employees.Add(employee);
+            _context.SaveChanges();
 
-      //          _context.Employees.Remove(querableEmployee);
-      //          _context.SaveChanges();
-      //  }
+            List<RoleTo> roleTos = new List<RoleTo>();
+            foreach (var r in employeeDTO.Roles)
+            {
+                roleTos.Add(r);
+            }
 
-      //  public int CreateEmployee(Employee employee)
-      //  {
-      //      if (employee == null)
-      //      {
-      //          throw new ArgumentNullException(nameof(employee));
-      //      }
-      //      _context.Employees.Add(employee);
-      //      _context.SaveChanges();
+            EmployeeRole employeeRole = new EmployeeRole();
 
-      //      return employee.EmployeeId;
-      //}
+            foreach (var r in roleTos)
+            {
+                Role role = new Role()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = r.Name,
+                    Description = r.Description,
+                    CreatedAt = DateTime.UtcNow
+                };
+                _context.Roles.Add(role);
+                _context.SaveChanges();
+
+                employeeRole.Id = role.Id;
+            }
+
+            employeeRole.EmployeeId = employee.EmployeeId;
+
+            _context.EmployeeRoles.Add(employeeRole);
+            _context.SaveChanges();
+
+            return employee.EmployeeId;
+        }
+        //  public int CreateEmployee(Employee employee)
+        //  {
+        //      if (employee == null)
+        //      {
+        //          throw new ArgumentNullException(nameof(employee));
+        //      }
+        //      _context.Employees.Add(employee);
+        //      _context.SaveChanges();
+
+        //      return employee.EmployeeId;
+        //}
+
+        //  public void DeleteEmployee(int id)
+        //  {
+        //          var querableEmployee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
+
+        //          _context.Employees.Remove(querableEmployee);
+        //          _context.SaveChanges();
+        //  }
+
+
 
     }
 }

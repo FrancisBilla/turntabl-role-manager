@@ -41,5 +41,13 @@ namespace TurntablRoleManager.API.Controllers
             var employee = _employeeRepository.GetEmployeeById(id);
             return employee;
         }
+
+        [HttpPost]   // api/employees
+        public int CreateEmployeeWithRoles(AddEmployeeDTO employeeDTO)
+        {
+            var employeeIdResponse= _employeeRepository.AddEmployeeWithRoles(employeeDTO);
+            return employeeIdResponse;
+        }
+
     }
 }
