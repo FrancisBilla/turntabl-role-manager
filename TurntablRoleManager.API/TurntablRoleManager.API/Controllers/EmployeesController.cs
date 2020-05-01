@@ -45,7 +45,7 @@ namespace TurntablRoleManager.API.Controllers
         [HttpPost]   // api/employees
         public int CreateEmployeeWithRoles(AddEmployeeDTO employeeDTO)
         {
-            var employeeIdResponse= _employeeRepository.AddEmployeeWithRoles(employeeDTO);
+            var employeeIdResponse= _employeeRepository.AssignEmployeeWithRoles(employeeDTO);
             return employeeIdResponse;
         }
 
