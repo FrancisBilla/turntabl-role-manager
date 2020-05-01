@@ -106,58 +106,37 @@ namespace TurntablRoleManager.API.Services
 
         public int AssignEmployeeWithRoles(AddEmployeeDTO employeeDTO)
         {
+            // mapping dto to and employee
             Employee employee = new Employee();
             employee.EmployeeFirstName = employeeDTO.EmployeeFirstName;
             employee.EmployeeLastName = employeeDTO.EmployeeLastName;
             employee.EmployeeEmail = employeeDTO.EmployeeEmail;
             employee.EmployeeAddress = employeeDTO.EmployeeAddress;
-
+            
+            // saving employee part of dto to db
             _context.Employees.Add(employee);
             _context.SaveChanges();
 
-            List<Guid> RoleGuids = new List<Guid>();
+            // convert dto role string guids to pure guids
+            List<Guid> roleGuids = new List<Guid>();
             foreach (var stringGuid in employeeDTO.RoleGuids)
             {
-                Guid res = Guid.Parse(stringGuid);
-                RoleGuids.Add(res);
+                Guid roleGuid = Guid.Parse(stringGuid);
+                roleGuids.Add(roleGuid);
             }
 
+            // assigning employee with roles and saving to db
             EmployeeRole employeeRole = new EmployeeRole();
-
-            foreach (var guid in RoleGuids)
+            foreach (var guid in roleGuids)
             {
-                employeeRole.Id = guid;
+                employeeRole.Id = guid;     // roleId
                 employeeRole.EmployeeId = employee.EmployeeId;
 
                 _context.EmployeeRoles.Add(employeeRole);
                 _context.SaveChanges();
             }
 
-
             return employee.EmployeeId;
         }
-
-        //  public int CreateEmployee(Employee employee)
-        //  {
-        //      if (employee == null)
-        //      {
-        //          throw new ArgumentNullException(nameof(employee));
-        //      }
-        //      _context.Employees.Add(employee);
-        //      _context.SaveChanges();
-
-        //      return employee.EmployeeId;
-        //}
-
-        //  public void DeleteEmployee(int id)
-        //  {
-        //          var querableEmployee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
-
-        //          _context.Employees.Remove(querableEmployee);
-        //          _context.SaveChanges();
-        //  }
-
-
-
     }
 }
