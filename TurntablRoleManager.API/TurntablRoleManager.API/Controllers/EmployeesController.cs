@@ -43,17 +43,19 @@ namespace TurntablRoleManager.API.Controllers
         }
 
         [HttpPost]   // api/employees
-        public int CreateEmployeeWithRoles(AddEmployeeDTO employeeDTO)
+        public string CreateEmployeeWithRoles(AddEmployeeDTO employeeDTO)
         {
             var employeeIdResponse= _employeeRepository.AssignEmployeeWithRoles(employeeDTO);
-            return employeeIdResponse;
+            string result = $"Successfully created employee with employeeId = {employeeIdResponse} ";
+            return result;
         }
 
-        [HttpDelete("{id}")]    
+        [HttpDelete("{id}")]    // api/employees/1
         public string DeleteEmployee(int id)
         {
             var employeeIdAsResponse = _employeeRepository.DeleteEmployee(id);
-            return $"Deleted employeeId = {employeeIdAsResponse} successfully";
+            string result = $"Deleted employeeId = {employeeIdAsResponse} successfully";
+            return result;
        }
     }
 }

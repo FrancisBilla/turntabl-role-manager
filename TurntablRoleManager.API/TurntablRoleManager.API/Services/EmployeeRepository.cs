@@ -140,7 +140,7 @@ namespace TurntablRoleManager.API.Services
             return employee.EmployeeId;
         }
 
-        // Remove employee by their Id 
+        // Remove employee by their Id and their assigned roles
         public int DeleteEmployee(int id)
         {
             var querableEmployee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
