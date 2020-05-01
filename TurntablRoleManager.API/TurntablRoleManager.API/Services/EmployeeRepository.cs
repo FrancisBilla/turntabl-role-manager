@@ -116,22 +116,23 @@ namespace TurntablRoleManager.API.Services
             _context.SaveChanges();
 
             List<Guid> RoleGuids = new List<Guid>();
-            foreach (var roleId in employeeDTO.RoleGuids)
+            foreach (var stringGuid in employeeDTO.RoleGuids)
             {
-                RoleGuids.Add(roleId);
+                Guid res = Guid.Parse(stringGuid);
+                RoleGuids.Add(res);
             }
 
             EmployeeRole employeeRole = new EmployeeRole();
 
-            foreach (var id in RoleGuids)
+            foreach (var guid in RoleGuids)
             {
-                employeeRole.Id = id;
+                employeeRole.Id = guid;
+                employeeRole.EmployeeId = employee.EmployeeId;
+
+                _context.EmployeeRoles.Add(employeeRole);
+                _context.SaveChanges();
             }
 
-            employeeRole.EmployeeId = employee.EmployeeId;
-            
-            _context.EmployeeRoles.Add(employeeRole);
-            _context.SaveChanges();
 
             return employee.EmployeeId;
         }

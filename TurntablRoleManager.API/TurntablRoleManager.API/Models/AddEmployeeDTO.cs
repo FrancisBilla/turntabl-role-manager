@@ -11,6 +11,6 @@ namespace TurntablRoleManager.API.Models
         public string EmployeeLastName { get; set; }
         public string EmployeeEmail { get; set; }
         public string EmployeeAddress { get; set; }
-        public List<Guid> RoleGuids { get; set; }
+        public List<string> RoleGuids { get; set; }
     }
 }
