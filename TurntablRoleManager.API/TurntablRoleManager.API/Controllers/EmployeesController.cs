@@ -38,7 +38,7 @@ namespace TurntablRoleManager.API.Controllers
         [HttpGet("{id}")]   // api/employees/1
         public DetailEmployeeDTO Employee(int id)
         {
-            var employee = _employeeRepository.GetEmployeeById(id);
+            var employee = _employeeRepository.GetEmployee(id);
             return employee;
         }
 
@@ -49,14 +49,11 @@ namespace TurntablRoleManager.API.Controllers
             return employeeIdResponse;
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}")]    
         public string DeleteEmployee(int id)
         {
-                 var querableEmployee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
-
-               _context.Employees.Remove(querableEmployee);
-                _context.SaveChanges();
-            return $"Deleted employeeId = {querableEmployee.EmployeeId} successfully";
+            var employeeIdAsResponse = _employeeRepository.DeleteEmployee(id);
+            return $"Deleted employeeId = {employeeIdAsResponse} successfully";
        }
     }
 }

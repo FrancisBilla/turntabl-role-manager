@@ -66,8 +66,8 @@ namespace TurntablRoleManager.API.Services
         }
 
 
-        // Get single employee with assigned roles 
-        public DetailEmployeeDTO GetEmployeeById(int id)
+        // Get single employee and their roles 
+        public DetailEmployeeDTO GetEmployee(int id)
         {
             DetailEmployeeDTO detailEmployee = new DetailEmployeeDTO();
             List<RoleTo> soloEmployeeRoles = new List<RoleTo>();
@@ -104,6 +104,7 @@ namespace TurntablRoleManager.API.Services
             return detailEmployee ;
         }
 
+        // Assign roles during employee creation
         public int AssignEmployeeWithRoles(AddEmployeeDTO employeeDTO)
         {
             // mapping dto to and employee
@@ -137,6 +138,17 @@ namespace TurntablRoleManager.API.Services
             }
 
             return employee.EmployeeId;
+        }
+
+        // Remove employee by their Id 
+        public int DeleteEmployee(int id)
+        {
+            var querableEmployee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
+
+            _context.Employees.Remove(querableEmployee);
+            _context.SaveChanges();
+
+            return querableEmployee.EmployeeId;
         }
     }
 }
