@@ -1,17 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TurntablRoleManager.API.DbContexts;
 using TurntablRoleManager.API.Entities;
 using TurntablRoleManager.API.Models;
 
 namespace TurntablRoleManager.API.Services
 {
-    public class EmployeeRepository: IEmployeeRepository
+    public class EmployeeRepository : IEmployeeRepository
     {
         private readonly TurntablDbContext _context;
 
@@ -31,11 +27,11 @@ namespace TurntablRoleManager.API.Services
             {
                 // fetching roles related to each employee
                 var rolesInDb = (from e in _context.Employees
-                             join er in _context.EmployeeRoles on e.EmployeeId equals er.EmployeeId
-                             join r in _context.Roles on er.Id equals r.Id
-                             where e.EmployeeId == emp.EmployeeId
-                             select r).ToList();
-              
+                                 join er in _context.EmployeeRoles on e.EmployeeId equals er.EmployeeId
+                                 join r in _context.Roles on er.Id equals r.Id
+                                 where e.EmployeeId == emp.EmployeeId
+                                 select r).ToList();
+
                 List<RoleTo> individualEmployeeRoles = new List<RoleTo>();
 
                 foreach (var r in rolesInDb)
@@ -73,13 +69,13 @@ namespace TurntablRoleManager.API.Services
             List<RoleTo> soloEmployeeRoles = new List<RoleTo>();
 
             var querableEmployee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
-          
+
             // fetching roles related to employee
             var querableRoles = (from e in _context.Employees
-                         join er in _context.EmployeeRoles on e.EmployeeId equals er.EmployeeId
-                         join r in _context.Roles on er.Id equals r.Id
-                         where e.EmployeeId == querableEmployee.EmployeeId
-                         select r).ToList();
+                                 join er in _context.EmployeeRoles on e.EmployeeId equals er.EmployeeId
+                                 join r in _context.Roles on er.Id equals r.Id
+                                 where e.EmployeeId == querableEmployee.EmployeeId
+                                 select r).ToList();
 
             // fetching all roles related to the employee
             foreach (var r in querableRoles)
@@ -101,7 +97,7 @@ namespace TurntablRoleManager.API.Services
             detailEmployee.EmployeeAddress = querableEmployee.EmployeeAddress;
             detailEmployee.Roles = soloEmployeeRoles;
 
-            return detailEmployee ;
+            return detailEmployee;
         }
 
         // Assign roles during employee creation
@@ -113,7 +109,7 @@ namespace TurntablRoleManager.API.Services
             employee.EmployeeLastName = employeeDTO.EmployeeLastName;
             employee.EmployeeEmail = employeeDTO.EmployeeEmail;
             employee.EmployeeAddress = employeeDTO.EmployeeAddress;
-            
+
             // saving employee part of dto to db
             _context.Employees.Add(employee);
             _context.SaveChanges();
