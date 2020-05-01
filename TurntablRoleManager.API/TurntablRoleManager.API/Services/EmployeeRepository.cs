@@ -24,20 +24,21 @@ namespace TurntablRoleManager.API.Services
         public IEnumerable<DetailEmployeeDTO> GetEmployees()
         {
             List<DetailEmployeeDTO> detailEmployeeDTOs = new List<DetailEmployeeDTO>();
-            List<RoleTo> individualEmployeeRoles = new List<RoleTo>();
 
             var employeesInDb = _context.Employees.ToList();
 
             foreach (var emp in employeesInDb)
             {
                 // fetching roles related to each employee
-                var roles = (from e in _context.Employees
+                var rolesInDb = (from e in _context.Employees
                              join er in _context.EmployeeRoles on e.EmployeeId equals er.EmployeeId
                              join r in _context.Roles on er.Id equals r.Id
                              where e.EmployeeId == emp.EmployeeId
                              select r).ToList();
+              
+                List<RoleTo> individualEmployeeRoles = new List<RoleTo>();
 
-                foreach (var r in roles)
+                foreach (var r in rolesInDb)
                 {
                     // mapping role dto
                     RoleTo roleTo = new RoleTo();
@@ -63,6 +64,7 @@ namespace TurntablRoleManager.API.Services
 
             return detailEmployeeDTOs;
         }
+
 
         // Get single employee with assigned roles 
         public DetailEmployeeDTO GetEmployeeById(int id)
