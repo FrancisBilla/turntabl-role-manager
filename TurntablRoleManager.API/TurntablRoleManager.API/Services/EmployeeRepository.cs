@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TurntablRoleManager.API.DbContexts;
 using TurntablRoleManager.API.Entities;
+using TurntablRoleManager.API.Models;
 
 namespace TurntablRoleManager.API.Services
 {
-    public class EmployeeRepository: IEmployeeRepository
+    public class EmployeeRepository : IEmployeeRepository
     {
         private readonly TurntablDbContext _context;
 
@@ -18,37 +17,143 @@ namespace TurntablRoleManager.API.Services
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public IEnumerable<Employee> GetEmployees()
+        // Get all employees and their corresponding roles 
+        public IEnumerable<DetailEmployeeDTO> GetEmployees()
         {
-            var querable = _context.Employees.ToList<Employee>();
-            return querable;
-        }
+            List<DetailEmployeeDTO> detailEmployeeDTOs = new List<DetailEmployeeDTO>();
 
-        public Employee GetEmployeeById(int id)
-        {
-            var employee= _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
-            return employee;
-        }
+            var employeesInDb = _context.Employees.ToList();
 
-        public void DeleteEmployee(int id)
-        {
-                var querableEmployee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
-
-                _context.Employees.Remove(querableEmployee);
-                _context.SaveChanges();
-        }
-
-        public int CreateEmployee(Employee employee)
-        {
-            if (employee == null)
+            foreach (var emp in employeesInDb)
             {
-                throw new ArgumentNullException(nameof(employee));
+                // fetching roles related to each employee
+                var rolesInDb = (from e in _context.Employees
+                                 join er in _context.EmployeeRoles on e.EmployeeId equals er.EmployeeId
+                                 join r in _context.Roles on er.Id equals r.Id
+                                 where e.EmployeeId == emp.EmployeeId
+                                 select r).ToList();
+
+                List<RoleTo> individualEmployeeRoles = new List<RoleTo>();
+
+                foreach (var r in rolesInDb)
+                {
+                    // mapping role dto
+                    RoleTo roleTo = new RoleTo();
+                    roleTo.Id = r.Id;
+                    roleTo.Name = r.Name;
+                    roleTo.Description = r.Description;
+                    roleTo.CreatedAt = r.CreatedAt;
+
+                    individualEmployeeRoles.Add(roleTo);
+                }
+
+                // mapping employee dto to corresponding fields 
+                DetailEmployeeDTO detailEmployeeDTO = new DetailEmployeeDTO();
+                detailEmployeeDTO.EmployeeId = emp.EmployeeId;
+                detailEmployeeDTO.EmployeeFirstName = emp.EmployeeFirstName;
+                detailEmployeeDTO.EmployeeLastName = emp.EmployeeLastName;
+                detailEmployeeDTO.EmployeeEmail = emp.EmployeeEmail;
+                detailEmployeeDTO.EmployeeAddress = emp.EmployeeAddress;
+                detailEmployeeDTO.Roles = individualEmployeeRoles;
+
+                detailEmployeeDTOs.Add(detailEmployeeDTO);
+            };
+
+            return detailEmployeeDTOs;
+        }
+
+
+        // Get single employee and their roles 
+        public DetailEmployeeDTO GetEmployee(int id)
+        {
+            DetailEmployeeDTO detailEmployee = new DetailEmployeeDTO();
+            List<RoleTo> soloEmployeeRoles = new List<RoleTo>();
+
+            var querableEmployee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
+
+            // fetching roles related to employee
+            var querableRoles = (from e in _context.Employees
+                                 join er in _context.EmployeeRoles on e.EmployeeId equals er.EmployeeId
+                                 join r in _context.Roles on er.Id equals r.Id
+                                 where e.EmployeeId == querableEmployee.EmployeeId
+                                 select r).ToList();
+
+            // fetching all roles related to the employee
+            foreach (var r in querableRoles)
+            {
+                RoleTo roleTo = new RoleTo();
+                roleTo.Id = r.Id;
+                roleTo.Name = r.Name;
+                roleTo.Description = r.Description;
+                roleTo.CreatedAt = r.CreatedAt;
+
+                soloEmployeeRoles.Add(roleTo);
             }
+
+            // mapping querable data to employee detail 
+            detailEmployee.EmployeeId = querableEmployee.EmployeeId;
+            detailEmployee.EmployeeFirstName = querableEmployee.EmployeeFirstName;
+            detailEmployee.EmployeeLastName = querableEmployee.EmployeeLastName;
+            detailEmployee.EmployeeEmail = querableEmployee.EmployeeEmail;
+            detailEmployee.EmployeeAddress = querableEmployee.EmployeeAddress;
+            detailEmployee.Roles = soloEmployeeRoles;
+
+            return detailEmployee;
+        }
+
+        // Assign roles during employee creation
+        public EmployeeTo AssignEmployeeWithRoles(AddEmployeeDTO employeeDTO)
+        {   
+            // mapping dto to an employee
+            Employee employee = new Employee();
+            employee.EmployeeFirstName = employeeDTO.EmployeeFirstName;
+            employee.EmployeeLastName = employeeDTO.EmployeeLastName;
+            employee.EmployeeEmail = employeeDTO.EmployeeEmail;
+            employee.EmployeeAddress = employeeDTO.EmployeeAddress;
+
+            // saving employee part of dto to db
             _context.Employees.Add(employee);
             _context.SaveChanges();
 
-            return employee.EmployeeId;
-      }
+            // convert dto role string guids to pure guids
+            List<Guid> roleGuids = new List<Guid>();
+            foreach (var stringGuid in employeeDTO.RoleGuids)
+            {
+                Guid roleGuid = Guid.Parse(stringGuid);
+                roleGuids.Add(roleGuid);
+            }
 
+            // assigning employee with roles and saving to db
+            EmployeeRole employeeRole = new EmployeeRole();
+            foreach (var guid in roleGuids)
+            {
+                employeeRole.Id = guid;     // roleId
+                employeeRole.EmployeeId = employee.EmployeeId;
+
+                _context.EmployeeRoles.Add(employeeRole);
+                _context.SaveChanges();
+            }
+
+            EmployeeTo employeeTo = new EmployeeTo()
+            {
+                EmployeeFirstName = employee.EmployeeFirstName,
+                EmployeeLastName = employee.EmployeeLastName,
+                EmployeeEmail = employee.EmployeeEmail,
+                EmployeeAddress = employee.EmployeeAddress
+            };
+
+            return employeeTo;
+        }
+
+        // Remove employee by their Id and their assigned roles
+        public int DeleteEmployee(int id)
+        {
+            var querableEmployee = _context.Employees.FirstOrDefault(e => e.EmployeeId == id);
+
+            _context.Employees.Remove(querableEmployee);
+            _context.SaveChanges();
+
+            return querableEmployee.EmployeeId;
+        }
     }
 }

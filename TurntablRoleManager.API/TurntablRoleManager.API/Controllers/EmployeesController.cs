@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,54 +17,45 @@ namespace TurntablRoleManager.API.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly IMapper _mapper;
+        private readonly TurntablDbContext _context;
 
         public EmployeesController(IEmployeeRepository employeeRepository, IMapper mapper, TurntablDbContext context)
         {
-            _employeeRepository = employeeRepository;
-            _mapper = mapper ??
-                throw new ArgumentNullException(nameof(mapper));
+            _employeeRepository = employeeRepository ??
+                throw new ArgumentNullException(nameof(employeeRepository)); 
+            _context = context ??
+                throw new ArgumentNullException(nameof(context)); 
         }
 
-        [HttpGet]
-        public IEnumerable<Employee> Employees()
-        { 
+        [HttpGet]  // api/employees
+        public IEnumerable<DetailEmployeeDTO> Employees()
+        {
             var employees = _employeeRepository.GetEmployees();
-
-            if(employees == null)
-            {
-                return (IEnumerable<Employee>)NotFound();
-            }
-
             return employees;
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Employee(int id)
+
+        [HttpGet("{id}")]   // api/employees/1
+        public DetailEmployeeDTO Employee(int id)
         {
-            var employee = _employeeRepository.GetEmployeeById(id);
-
-            if (employee == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(employee);
+            var employee = _employeeRepository.GetEmployee(id);
+            return employee;
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpPost]   // api/employees
+        public EmployeeTo CreateEmployeeWithRoles(AddEmployeeDTO employeeDTO)
         {
-            _employeeRepository.DeleteEmployee(id);
-            return NoContent();
+            var employeeDto= _employeeRepository.AssignEmployeeWithRoles(employeeDTO);
+            //string result = $"Successfully created employee with employeeId = {employeeIdResponse} ";
+            return employeeDto;
         }
 
-
-        [HttpPost]
-        public  ActionResult<int> Post(Employee employee)
+        [HttpDelete("{id}")]    // api/employees/1
+        public string DeleteEmployee(int id)
         {
-            var employeeId = _employeeRepository.CreateEmployee(employee);
-            return employeeId;
-        }
+            var employeeIdAsResponse = _employeeRepository.DeleteEmployee(id);
+            string result = $"Deleted employeeId = {employeeIdAsResponse} successfully";
+            return result;
+       }
     }
 }

@@ -30,5 +30,7 @@ namespace TurntablRoleManager.API.Entities
         [StringLength(255)]
         public string EmployeeAddress { get; set; }
 
+        public ICollection<EmployeeRole> EmployeeRoles { get; set; }
+
     }
 }

@@ -51,6 +51,31 @@ namespace TurntablRoleManager.API.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("TurntablRoleManager.API.Entities.EmployeeRole", b =>
+                {
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("RoleId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("EmployeeId", "Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("EmployeeRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            EmployeeId = 1,
+                            Id = new Guid("7c4854f2-bbfc-4d5a-88fa-9fe19e480bc0")
+                        });
+                });
+
             modelBuilder.Entity("TurntablRoleManager.API.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -72,6 +97,19 @@ namespace TurntablRoleManager.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("TurntablRoleManager.API.Entities.EmployeeRole", b =>
+                {
+                    b.HasOne("TurntablRoleManager.API.Entities.Employee", "Employee")
+                        .WithMany("EmployeeRoles")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TurntablRoleManager.API.Entities.Role", "Role")
+                        .WithMany("EmployeeRoles")
+                        .HasForeignKey("RoleId");
                 });
 #pragma warning restore 612, 618
         }

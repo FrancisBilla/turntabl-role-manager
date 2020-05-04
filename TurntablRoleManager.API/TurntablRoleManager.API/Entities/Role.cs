@@ -20,6 +20,8 @@ namespace TurntablRoleManager.API.Entities
 
         [Required]
         public DateTime CreatedAt { get; set; }
-        
+
+        public ICollection<EmployeeRole> EmployeeRoles { get; set; }
+
     }
 }
