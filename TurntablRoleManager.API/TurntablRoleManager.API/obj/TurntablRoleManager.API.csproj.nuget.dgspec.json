@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mr. Erbynn\\dev\\TURNTABL\\turntabl-role-manager\\TurntablRoleManager.API\\TurntablRoleManager.API\\TurntablRoleManager.API.csproj": {}
+    "\\\\Mac\\Home\\Documents\\Turntabl\\Projects\\Tutorials\\Frontend\\ASP.Net Blazor\\turntabl-role-manager\\TurntablRoleManager.API\\TurntablRoleManager.API\\TurntablRoleManager.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mr. Erbynn\\dev\\TURNTABL\\turntabl-role-manager\\TurntablRoleManager.API\\TurntablRoleManager.API\\TurntablRoleManager.API.csproj": {
+    "\\\\Mac\\Home\\Documents\\Turntabl\\Projects\\Tutorials\\Frontend\\ASP.Net Blazor\\turntabl-role-manager\\TurntablRoleManager.API\\TurntablRoleManager.API\\TurntablRoleManager.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mr. Erbynn\\dev\\TURNTABL\\turntabl-role-manager\\TurntablRoleManager.API\\TurntablRoleManager.API\\TurntablRoleManager.API.csproj",
+        "projectUniqueName": "\\\\Mac\\Home\\Documents\\Turntabl\\Projects\\Tutorials\\Frontend\\ASP.Net Blazor\\turntabl-role-manager\\TurntablRoleManager.API\\TurntablRoleManager.API\\TurntablRoleManager.API.csproj",
         "projectName": "TurntablRoleManager.API",
-        "projectPath": "C:\\Users\\Mr. Erbynn\\dev\\TURNTABL\\turntabl-role-manager\\TurntablRoleManager.API\\TurntablRoleManager.API\\TurntablRoleManager.API.csproj",
-        "packagesPath": "C:\\Users\\Mr. Erbynn\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mr. Erbynn\\dev\\TURNTABL\\turntabl-role-manager\\TurntablRoleManager.API\\TurntablRoleManager.API\\obj\\",
+        "projectPath": "\\\\Mac\\Home\\Documents\\Turntabl\\Projects\\Tutorials\\Frontend\\ASP.Net Blazor\\turntabl-role-manager\\TurntablRoleManager.API\\TurntablRoleManager.API\\TurntablRoleManager.API.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "\\\\Mac\\Home\\Documents\\Turntabl\\Projects\\Tutorials\\Frontend\\ASP.Net Blazor\\turntabl-role-manager\\TurntablRoleManager.API\\TurntablRoleManager.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Mr. Erbynn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -83,7 +83,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300-preview-015048\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
         }
       }
     }
