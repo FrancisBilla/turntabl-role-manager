@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TurntablRoleManager.API.DbContexts;
@@ -101,9 +102,9 @@ namespace TurntablRoleManager.API.Services
         }
 
         // Assign roles during employee creation
-        public int AssignEmployeeWithRoles(AddEmployeeDTO employeeDTO)
-        {
-            // mapping dto to and employee
+        public EmployeeTo AssignEmployeeWithRoles(AddEmployeeDTO employeeDTO)
+        {   
+            // mapping dto to an employee
             Employee employee = new Employee();
             employee.EmployeeFirstName = employeeDTO.EmployeeFirstName;
             employee.EmployeeLastName = employeeDTO.EmployeeLastName;
@@ -133,7 +134,15 @@ namespace TurntablRoleManager.API.Services
                 _context.SaveChanges();
             }
 
-            return employee.EmployeeId;
+            EmployeeTo employeeTo = new EmployeeTo()
+            {
+                EmployeeFirstName = employee.EmployeeFirstName,
+                EmployeeLastName = employee.EmployeeLastName,
+                EmployeeEmail = employee.EmployeeEmail,
+                EmployeeAddress = employee.EmployeeAddress
+            };
+
+            return employeeTo;
         }
 
         // Remove employee by their Id and their assigned roles
