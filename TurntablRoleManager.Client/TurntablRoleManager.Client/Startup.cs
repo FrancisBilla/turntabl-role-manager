@@ -32,7 +32,10 @@ namespace TurntablRoleManager.Client
             {
                 client.BaseAddress = new Uri("http://localhost:6000/"); //setting up the baseURL for http call
             });
-            
+            services.AddHttpClient<IEmployeeDataService, EmployeeDataService>(client =>
+            {
+                client.BaseAddress = new Uri("http://localhost:6000/"); //setting up the baseURL for http call
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
